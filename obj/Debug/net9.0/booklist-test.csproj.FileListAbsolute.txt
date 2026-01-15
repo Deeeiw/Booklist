@@ -1,0 +1,14 @@
+/home/deiw/RiderProjects/booklist-test/bin/Debug/net9.0/booklist-test
+/home/deiw/RiderProjects/booklist-test/bin/Debug/net9.0/booklist-test.deps.json
+/home/deiw/RiderProjects/booklist-test/bin/Debug/net9.0/booklist-test.runtimeconfig.json
+/home/deiw/RiderProjects/booklist-test/bin/Debug/net9.0/booklist-test.dll
+/home/deiw/RiderProjects/booklist-test/bin/Debug/net9.0/booklist-test.pdb
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.GeneratedMSBuildEditorConfig.editorconfig
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.AssemblyInfoInputs.cache
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.AssemblyInfo.cs
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.csproj.CoreCompileInputs.cache
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.dll
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/refint/booklist-test.dll
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.pdb
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.genruntimeconfig.cache
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/ref/booklist-test.dll
