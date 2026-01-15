@@ -12,3 +12,4 @@
 /home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.pdb
 /home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.genruntimeconfig.cache
 /home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/ref/booklist-test.dll
+/home/deiw/RiderProjects/booklist-test/obj/Debug/net9.0/booklist-test.sourcelink.json

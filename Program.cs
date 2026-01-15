@@ -12,19 +12,21 @@ class Booklist
         Console.WriteLine("Welcome to the BOOKLIST book tracker program!\n" +
                           "What would you like to do?\n");
         
-        Console.WriteLine("1. See your list of books\n" +
-                          "2. Add a new book\n" +
-                          "3. Remove a book\n" +
+        DisplayBooks();
+        
+        Console.WriteLine("1. Add a new position\n" +
+                          "2. Edit a position\n" +
+                          "3. Remove a position\n" +
                           "4. Quit\n");
 
         var choice = Console.ReadLine();
         switch (choice)
         {
             case "1":
-                DisplayBooks();
+                AddBook();
                 break;
             case "2":
-                AddBook();
+                EditBook();
                 break;
             case "3":
                 RemoveBook();
@@ -46,13 +48,59 @@ class Booklist
         }
     }
 
+    private void EditBook()
+    {
+        Console.WriteLine("Enter an index of the book you want to edit: ");
+        var index = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Which information would you like to edit?\n" +
+                          "1. Title\n" +
+                          "2. Author\n" +
+                          "3. Pages\n" +
+                          "4. Status\n" +
+                          "5. Cancel edition");
+        var choice = Console.ReadLine();
+        switch (choice)
+        {
+            case "1":
+                Console.WriteLine("Enter new title: ");
+                var newtitle =  Console.ReadLine();
+                Books[index - 1].Title = newtitle;
+                StartPage();
+                break;
+            case "2":
+                Console.WriteLine("Enter new author: ");
+                var newauthor = Console.ReadLine();
+                Books[index - 1].Author = newauthor;
+                StartPage();
+                break;
+            case "3":
+                Console.WriteLine("Enter new pages: ");
+                var newpages = Convert.ToInt32(Console.ReadLine());
+                Books[index - 1].Pages = newpages;
+                StartPage();
+                break;
+            case "4":
+                Console.WriteLine("Enter new status: ");
+                var newstatus = Console.ReadLine();
+                Books[index - 1].Status = newstatus;
+                StartPage();
+                break;
+            case "5":
+                StartPage();
+                break;
+            default:
+                Console.Error.WriteLine("Invalid choice. Please choose only available options!");
+                StartPage();
+                break;
+        }
+    }
+    
     private void RemoveBook()
     {
-        DisplayBooks();
         Console.WriteLine("Enter an index of the book you want to remove: ");
         var index = Convert.ToInt32(Console.ReadLine());
         Books.RemoveAt(index - 1);
-        DisplayBooks();
+        StartPage();
     }
     
     private void AddBook()
@@ -79,10 +127,10 @@ class Booklist
 
 class Book
 {
-    public string Title { get; }
-    public string Author { get; }
-    public int Pages { get; }
-    public string Status { get; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public int Pages { get; set; }
+    public string Status { get; set; }
 
     public Book(string title, string author, int pages, string status)
     {
