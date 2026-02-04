@@ -1,13 +1,18 @@
-﻿
-using booklist_test;
-    
+﻿using booklist_test;
+using Microsoft.EntityFrameworkCore;
+
 var program = new Booklist();
 program.StartPage();
 
-class Booklist : BookContext
+class Booklist
 {
     public void StartPage()
     {
+        using (var context = new BookContext())
+        {
+            context.Database.Migrate();
+        }
+
         Console.Clear();
         Console.WriteLine("Welcome to the BOOKLIST book tracker program!\n" +
                           "What would you like to do?\n");
@@ -20,7 +25,6 @@ class Booklist : BookContext
                           "4. Quit\n");
 
         var choice = Console.ReadLine();
-        using var context = new BookContext();
         switch (choice)
         {
             case "1":
@@ -43,69 +47,94 @@ class Booklist : BookContext
 
     private void DisplayBooks()
     {
-        foreach (Book book in Books)
+        using var context = new BookContext();
+        
+        var books =  context.Books.ToList();
+        if (!books.Any())
         {
-            Console.WriteLine($"{Books.IndexOf(book) + 1} {book.Title} {book.Author} - {book.Pages} pages - Status: {book.Status}");
+            Console.WriteLine("No books are being tracked.");
+        }
+        
+        foreach (var book in books)
+        {
+            Console.WriteLine($"{book.Id} {book.Title} {book.Author} - {book.Pages} pages - Status: {book.Status}");
         }
     }
 
     private void EditBook()
     {
-        Console.WriteLine("Enter an index of the book you want to edit: ");
-        var index = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine("Which information would you like to edit?\n" +
-                          "1. Title\n" +
-                          "2. Author\n" +
-                          "3. Pages\n" +
-                          "4. Status\n" +
-                          "5. Cancel edition");
+        using var context = new BookContext();
+
+        Console.WriteLine("Enter the ID of the book you want to edit:");
+        if (!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Invalid ID.");
+            return;
+        }
+
+        var book = context.Books.FirstOrDefault(b => b.Id == id);
+
+        if (book == null)
+        {
+            Console.WriteLine("Book not found.");
+            return;
+        }
+
+        Console.WriteLine(
+            "Which information would you like to edit?\n" +
+            "1. Title\n" +
+            "2. Author\n" +
+            "3. Pages\n" +
+            "4. Status\n" +
+            "5. Cancel edition");
+
         var choice = Console.ReadLine();
+
         switch (choice)
         {
             case "1":
-                Console.WriteLine("Enter new title: ");
-                var newtitle =  Console.ReadLine();
-                Books[index - 1].Title = newtitle;
-                StartPage();
+                Console.WriteLine("Enter new title:");
+                book.Title = Console.ReadLine();
                 break;
             case "2":
-                Console.WriteLine("Enter new author: ");
-                var newauthor = Console.ReadLine();
-                Books[index - 1].Author = newauthor;
-                StartPage();
+                Console.WriteLine("Enter new author:");
+                book.Author = Console.ReadLine();
                 break;
             case "3":
-                Console.WriteLine("Enter new pages: ");
-                var newpages = Convert.ToInt32(Console.ReadLine());
-                Books[index - 1].Pages = newpages;
-                StartPage();
+                Console.WriteLine("Enter new pages:");
+                if (int.TryParse(Console.ReadLine(), out int pages))
+                    book.Pages = pages;
                 break;
             case "4":
-                Console.WriteLine("Enter new status: ");
-                var newstatus = Console.ReadLine();
-                Books[index - 1].Status = newstatus;
-                StartPage();
+                Console.WriteLine("Enter new status:");
+                book.Status = Console.ReadLine();
                 break;
             case "5":
-                StartPage();
-                break;
+                return;
             default:
-                Console.Error.WriteLine("Invalid choice. Please choose only available options!");
-                StartPage();
-                break;
+                Console.WriteLine("Invalid choice.");
+                return;
         }
+
+        context.SaveChanges();
+        Console.WriteLine("Book updated successfully.");
     }
+
     
     private void RemoveBook()
     {
-        Console.WriteLine("Enter an index of the book you want to remove: ");
-        var index = Convert.ToInt32(Console.ReadLine());
-        Books.RemoveAt(index - 1);
+        using var context = new BookContext();
+        Console.WriteLine("Remove function still in progress!!!");
+        //Console.WriteLine("Enter an index of the book you want to remove: ");
+        //var index = Convert.ToInt32(Console.ReadLine());
+        //Books.RemoveAt(index - 1);
         StartPage();
     }
     
     private void AddBook()
     {
+        using var context = new BookContext();
+        
         Console.WriteLine("Enter title: ");
         var title =  Console.ReadLine();
         
@@ -118,8 +147,8 @@ class Booklist : BookContext
         Console.WriteLine("Enter status: ");
         var status  = Console.ReadLine();
         
-        var book = new Book(title, author, pages, isRead: status);
-        Books.Add(book);
+        context.Add(new Book(title, author, pages, status));
+        context.SaveChanges();
         
         Console.WriteLine("Book added successfully!");
         StartPage();
@@ -128,16 +157,17 @@ class Booklist : BookContext
 
 public class Book
 {
+    public int Id { get; set; }
     public string? Title { get; set; }
     public string? Author { get; set; }
     public int Pages { get; set; }
-    public bool IsRead { get; set; }
+    public string? Status { get; set; }
 
-    public Book(string title, string author, int pages, bool isRead)
+    public Book(string title, string author, int pages, string status)
     {
         Title = title;
         Author = author;
         Pages = pages;
-        IsRead = isRead;
+        Status = status;
     }
 }

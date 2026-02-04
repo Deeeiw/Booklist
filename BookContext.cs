@@ -8,7 +8,6 @@ public class BookContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(
-            "Server=localhost;Database=BookTracker;Trusted_Connection=True;TrustServerCertificate=True");
+        optionsBuilder.UseSqlite("Data Source=books.db");
     }
 }
