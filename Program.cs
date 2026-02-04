@@ -1,5 +1,7 @@
-﻿using booklist_test;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using booklist_test.Models;
+
+using booklist_test.Data;
 
 var program = new Booklist();
 program.StartPage();
@@ -152,22 +154,5 @@ class Booklist
         
         Console.WriteLine("Book added successfully!");
         StartPage();
-    }
-}
-
-public class Book
-{
-    public int Id { get; set; }
-    public string? Title { get; set; }
-    public string? Author { get; set; }
-    public int Pages { get; set; }
-    public string? Status { get; set; }
-
-    public Book(string title, string author, int pages, string status)
-    {
-        Title = title;
-        Author = author;
-        Pages = pages;
-        Status = status;
     }
 }

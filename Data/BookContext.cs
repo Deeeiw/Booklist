@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using booklist_test.Models;
 
-namespace booklist_test;
+namespace booklist_test.Data;
 
 public class BookContext : DbContext
 {
