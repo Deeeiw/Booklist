@@ -1,17 +1,17 @@
 ﻿
+using booklist_test;
+    
 var program = new Booklist();
 program.StartPage();
 
-class Booklist
+class Booklist : BookContext
 {
-    private List<Book> Books { get; set; } = [];
-    
     public void StartPage()
     {
         Console.Clear();
         Console.WriteLine("Welcome to the BOOKLIST book tracker program!\n" +
                           "What would you like to do?\n");
-        
+
         DisplayBooks();
         
         Console.WriteLine("1. Add a new position\n" +
@@ -20,6 +20,7 @@ class Booklist
                           "4. Quit\n");
 
         var choice = Console.ReadLine();
+        using var context = new BookContext();
         switch (choice)
         {
             case "1":
@@ -117,7 +118,7 @@ class Booklist
         Console.WriteLine("Enter status: ");
         var status  = Console.ReadLine();
         
-        var book = new Book(title, author, pages, status);
+        var book = new Book(title, author, pages, isRead: status);
         Books.Add(book);
         
         Console.WriteLine("Book added successfully!");
@@ -125,18 +126,18 @@ class Booklist
     }
 }
 
-class Book
+public class Book
 {
-    public string Title { get; set; }
-    public string Author { get; set; }
+    public string? Title { get; set; }
+    public string? Author { get; set; }
     public int Pages { get; set; }
-    public string Status { get; set; }
+    public bool IsRead { get; set; }
 
-    public Book(string title, string author, int pages, string status)
+    public Book(string title, string author, int pages, bool isRead)
     {
         Title = title;
         Author = author;
         Pages = pages;
-        Status = status;
+        IsRead = isRead;
     }
 }
