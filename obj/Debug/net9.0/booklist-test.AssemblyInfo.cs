@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("booklist-test")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+95a86d50dca67321bbf81f142725e6ded6aaf1a1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f8d43ce9fd16b59a5100436a85473945a2ccaba0")]
 [assembly: System.Reflection.AssemblyProductAttribute("booklist-test")]
 [assembly: System.Reflection.AssemblyTitleAttribute("booklist-test")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
