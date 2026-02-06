@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection.Metadata.Ecma335;
+using Microsoft.EntityFrameworkCore;
 using booklist_test.Models;
 using booklist_test.Data;
 
@@ -40,7 +41,6 @@ class Booklist
             case "4":
                 return;
             default:
-                Console.Error.WriteLine("Invalid choice. Please choose only available options!");
                 StartPage();
                 break;
         }
@@ -50,16 +50,17 @@ class Booklist
     {
         using var context = new BookContext();
         
-        var books =  context.Books.ToList();
+        var books =  context.Books.OrderBy(b => b.Id).ToList();
         if (!books.Any())
         {
             Console.WriteLine("No books are being tracked.");
         }
         
-        foreach (var book in books)
+        for(int i = 0; books.Count > i; i++)
         {
-            Console.WriteLine($"{book.Id} {book.Title} {book.Author} - {book.Pages} pages - Status: {book.Status}");
+            Console.WriteLine($"{i + 1} {books[i].Title} {books[i].Author} - {books[i].Pages} pages - Status: {books[i].Status}");
         }
+        
         Console.WriteLine();
     }
 
@@ -123,26 +124,33 @@ class Booklist
         
         StartPage();
     }
-
     
     private void RemoveBook()
     {
         using var context = new BookContext();
-        Console.WriteLine("Enter the ID of the book you want to edit:");
-        if (!int.TryParse(Console.ReadLine(), out int id))
+    
+        Console.Clear();
+        var books = context.Books.OrderBy(b => b.Id).ToList();
+        for(int i = 0; books.Count > i; i++)
         {
-            Console.WriteLine("Invalid ID.");
-            return;
-        }
-        var book = context.Books.FirstOrDefault(b => b.Id == id);
-
-        if (book == null)
-        {
-            Console.WriteLine("Book not found.");
-            return;
+            Console.WriteLine($"{i + 1} {books[i].Title} {books[i].Author} - {books[i].Pages} pages - Status: {books[i].Status}");
         }
 
-        context.Remove(book);
+        if (books.Count == 0)
+        {
+            Console.WriteLine("No books to delete.");
+            return;
+        }
+        
+        Console.WriteLine("Enter the ID of the book you want to delete:");
+        if (!int.TryParse(Console.ReadLine(), out int position) ||
+            position < 1 || position > books.Count)
+        {
+            Console.WriteLine("Invalid selection.");
+            return;
+        }
+
+        context.Books.Remove(books[position - 1]);
         context.SaveChanges();
         
         StartPage();
@@ -151,21 +159,64 @@ class Booklist
     private void AddBook()
     {
         using var context = new BookContext();
-        
-        Console.WriteLine("Enter title: ");
-        var title =  Console.ReadLine();
-        
-        Console.WriteLine("Enter author: ");
-        var author = Console.ReadLine();
-        
-        Console.WriteLine("Enter pages: ");
-        int pages = Convert.ToInt32(Console.ReadLine());
-        
-        Console.WriteLine("Enter status: ");
-        var status  = Console.ReadLine();
-        
-        context.Add(new Book(title, author, pages, status));
-        context.SaveChanges();
+
+        try
+        {
+            Console.WriteLine("Enter title: ");
+            var title = Console.ReadLine();
+            if (string.IsNullOrEmpty(title) || string.IsNullOrWhiteSpace(title))
+            {
+                throw new EmptyInputException();
+            }
+            if (title.Length > 80)
+            {
+                throw new Exception("The length of title must be less than 80 characters!");
+            }
+
+            Console.WriteLine("Enter author: ");
+            var author = Console.ReadLine();
+            if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
+            {
+                throw new EmptyInputException("Author cannot be empty!");
+            }
+            if (author.Length > 50)
+            {
+                throw new Exception("The length of author must be less than 50 characters!");
+            }
+
+            Console.WriteLine("Enter pages: ");
+            int pages = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter status: (Completed | Reading | Plan to read)");
+            var status = Console.ReadLine();
+            if (string.IsNullOrEmpty(status) || string.IsNullOrWhiteSpace(status))
+            {
+                throw new EmptyInputException("Status cannot be empty!");
+            }
+
+            if (status.Length > 14)
+            {
+                throw new Exception("The length of status must be less than 14 characters!");
+            }
+
+            context.Add(new Book(title, author, pages, status));
+            context.SaveChanges();
+        }
+        catch (EmptyInputException e)
+        {
+            Console.WriteLine(e.Message);
+            AddBook();
+        }
+        catch (FormatException e)
+        {
+            Console.WriteLine("The number of pages has to be a whole number!");
+            AddBook();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            AddBook();
+        }
         
         Console.WriteLine("Book added successfully!");
         StartPage();
