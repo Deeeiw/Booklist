@@ -30,6 +30,8 @@ obj/
 # ========================
 .idea/
 *.sln.iml
+*.DotSettings
+*.DotSettings.user
 
 # ========================
 # Visual Studio
