@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using booklist_test.Models;
-
 using booklist_test.Data;
 
 var program = new Booklist();
@@ -61,6 +60,7 @@ class Booklist
         {
             Console.WriteLine($"{book.Id} {book.Title} {book.Author} - {book.Pages} pages - Status: {book.Status}");
         }
+        Console.WriteLine();
     }
 
     private void EditBook()
@@ -120,16 +120,31 @@ class Booklist
 
         context.SaveChanges();
         Console.WriteLine("Book updated successfully.");
+        
+        StartPage();
     }
 
     
     private void RemoveBook()
     {
         using var context = new BookContext();
-        Console.WriteLine("Remove function still in progress!!!");
-        //Console.WriteLine("Enter an index of the book you want to remove: ");
-        //var index = Convert.ToInt32(Console.ReadLine());
-        //Books.RemoveAt(index - 1);
+        Console.WriteLine("Enter the ID of the book you want to edit:");
+        if (!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Invalid ID.");
+            return;
+        }
+        var book = context.Books.FirstOrDefault(b => b.Id == id);
+
+        if (book == null)
+        {
+            Console.WriteLine("Book not found.");
+            return;
+        }
+
+        context.Remove(book);
+        context.SaveChanges();
+        
         StartPage();
     }
     
