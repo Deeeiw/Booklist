@@ -38,15 +38,13 @@
 
 ## Tech Stack
 
-Language: **C#**
+Language: **C# 13**
 
 Framework: **.NET 9**
 
 Database: **SQLite**
 
 ORM: **Entity Framework Core**
-
-Application Type: **Console Application**
   
 ## Dependecies
 
